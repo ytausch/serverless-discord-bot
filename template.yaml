@@ -30,7 +30,7 @@ Resources:
             Method: post
       Environment:
         Variables:
-          DISCORD_PUBLIC_KEY: '{{resolve:ssm:/serverless-discord-bot/test/TEST_KEY}}'
+          DISCORD_PUBLIC_KEY: '{{resolve:ssm:/serverless-discord-bot/prod/DISCORD_PUBLIC_KEY}}'
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

@@ -5,5 +5,7 @@
   "main": "app.js",
   "author": "ytausch",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "discord-interactions": "^2.0.2"
+  }
 }

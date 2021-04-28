@@ -1,15 +1,46 @@
+const {InteractionType, InteractionResponseType, verifyKey} = require("discord-interactions");
+
+const ANSWER_UNAUTHORIZED = {
+    statusCode: 401,
+    body: JSON.stringify({
+        error: 'Bad request signature',
+    })
+};
+
 exports.lambdaHandler = async (event) => {
     console.log('Received event:', JSON.stringify(event));
 
-    const requestBody = JSON.parse(event.body);
-    const name = requestBody?.name ?? "Anonymous";
+    const publicKey = process.env.DISCORD_PUBLIC_KEY;
+    const signature = event.headers['x-signature-ed25519'];
+    const timestamp = event.headers['x-signature-timestamp'];
 
-    const publicKey = process.env.DISCORD_PUBLIC_KEY
+    console.log("Signature:", signature);
+    console.log("Timestamp:", timestamp);
+    console.log("Raw body:", event.body);
+
+
+    const isValidRequest = verifyKey(event.body, signature, timestamp, publicKey);
+
+    if (!isValidRequest) {
+        console.log("[UNAUTHORIZED]");
+        return ANSWER_UNAUTHORIZED;
+    }
+
+    const jsonBody = JSON.parse(event.body);
+    if (jsonBody.type === InteractionType.PING) {
+        console.log("PONG");
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: InteractionResponseType.PONG,
+            })
+        }
+    }
 
     return {
         statusCode: 200,
         body: JSON.stringify({
-            value: publicKey,
+            message: "Nothing to happen here...",
         })
     }
-}
+};
