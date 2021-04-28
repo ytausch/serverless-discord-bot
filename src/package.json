@@ -1,0 +1,9 @@
+{
+  "name": "serverless-discord-bot",
+  "version": "0.0.1",
+  "description": "A Serverless Discord Bot template built with Discord Slash Commands and AWS SAM.",
+  "main": "app.js",
+  "author": "ytausch",
+  "license": "MIT",
+  "dependencies": {}
+}
