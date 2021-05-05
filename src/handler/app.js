@@ -14,21 +14,16 @@ exports.lambdaHandler = async (event) => {
     const signature = event.headers['x-signature-ed25519'];
     const timestamp = event.headers['x-signature-timestamp'];
 
-    console.log("Signature:", signature);
-    console.log("Timestamp:", timestamp);
-    console.log("Raw body:", event.body);
-
-
     const isValidRequest = verifyKey(event.body, signature, timestamp, publicKey);
 
     if (!isValidRequest) {
-        console.log("[UNAUTHORIZED]");
+        console.log('[UNAUTHORIZED]');
         return ANSWER_UNAUTHORIZED;
     }
 
     const jsonBody = JSON.parse(event.body);
     if (jsonBody.type === InteractionType.PING) {
-        console.log("PONG");
+        console.log('PONG');
         return {
             statusCode: 200,
             body: JSON.stringify({
@@ -37,10 +32,17 @@ exports.lambdaHandler = async (event) => {
         }
     }
 
+    // dummy response
     return {
         statusCode: 200,
         body: JSON.stringify({
-            message: "Nothing to happen here...",
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+                "tts": false,
+                "content": 'Beep Boop :robot:',
+                "embeds": [],
+                "allowed_mentions": [],
+            }
         })
     }
 };

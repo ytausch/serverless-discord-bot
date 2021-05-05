@@ -18,7 +18,7 @@ Resources:
   DiscordHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./src
+      CodeUri: ./src/handler
       Description: "Serverless Function to handle incoming Discord requests"
       Handler: app.lambdaHandler
       Events:
