@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.aws-sam" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
@@ -21,7 +22,7 @@
                   <option value="NAMED_IAM" />
                 </list>
               </option>
-              <option name="stackName" value="serverless-discord-bot" />
+              <option name="stackName" value="serverless-discord-bot2" />
             </DeploySamConfig>
           </value>
         </entry>

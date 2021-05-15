@@ -4,12 +4,36 @@ Description: >
   serverless-discord-bot
   A Serverless Discord Bot template built with Discord Slash Commands and AWS SAM.
 
+Parameters:
+  BotTokenSecretArn:
+    Type: String
+    AllowedPattern: '^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:[a-zA-Z0-9\/_+=.@-]+$'
+    ConstraintDescription: "Parameter BotTokenSecretArn must contain a valid Secrets Manager Secret ARN"
+
 Globals:
   Function:
     Runtime: nodejs14.x
     Timeout: 3
 
 Resources:
+  CreateCommandsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/create_commands
+      Description: "Function to create Discord Slash Commands"
+      Handler: index.lambdaHandler
+      Environment:
+        Variables:
+          BOT_TOKEN_SECRET_ARN: !Ref BotTokenSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref BotTokenSecretArn
+
+  CreateCommandsInvoker:
+    Type: Custom::CreateCommandsInvoker
+    Properties:
+      ServiceToken: !GetAtt CreateCommandsFunction.Arn
+
   DiscordInteractionApi:
     Type: AWS::Serverless::Api
     Properties:

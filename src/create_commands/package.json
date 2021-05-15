@@ -1,0 +1,12 @@
+{
+  "name": "serverless-discord-bot.create_commands",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "ytausch",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.14.0",
+    "cfn-lambda": "^5.1.0",
+    "slash-create": "^3.1.0"
+  }
+}
