@@ -22,7 +22,7 @@
                   <option value="NAMED_IAM" />
                 </list>
               </option>
-              <option name="stackName" value="serverless-discord-bot2" />
+              <option name="stackName" value="serverless-discord-bot" />
             </DeploySamConfig>
           </value>
         </entry>

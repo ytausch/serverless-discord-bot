@@ -1,22 +1,48 @@
 const {once} = require('events');
 
-const {SecretsManagerClient, GetSecretValueCommand} = require('@aws-sdk/client-secrets-manager');
 const CfnLambda = require('cfn-lambda');
 const {SlashCreator} = require('slash-create');
 
-const HelloCommand = require("./commands/hello_command");
-
-const secretsClient = new SecretsManagerClient({});
+const {getCredentials} = require('./secretsHelper');
+const HelloCommand = require("./commands/helloCommand");
 
 exports.lambdaHandler = CfnLambda({
-    AsyncCreate: handleCreateAsync
-    // we do nothing at update or delete - commands should persist
+    AsyncCreate: handleCreateAsync,
+    AsyncUpdate: handleUpdateAsync,
+    AsyncDelete: handleDeleteAsync
 });
 
-async function handleCreateAsync(cfnRequestParams) {
+async function handleCreateAsync() {
     console.log("CREATE");
+    return handleCreateOrUpdate();
+}
 
-    const credentials = await getCredentials();
+async function handleUpdateAsync() {
+    console.log("UPDATE");
+    return handleCreateOrUpdate();
+}
+
+async function handleDeleteAsync() {
+    const credentials = await getCredentials(process.env.BOT_TOKEN_SECRET_ARN);
+
+    // do nothing here - commands should persist
+    // (note that global commands take up to 1 hour to update)
+
+    return {
+        PhysicalResourceId: "SlashCommands:" + credentials.appId
+    }
+}
+
+async function handleCreateOrUpdate() {
+    const credentials = await getCredentials(process.env.BOT_TOKEN_SECRET_ARN);
+    await createCommands(credentials);
+
+    return {
+        PhysicalResourceId: "SlashCommands:" + credentials.appId
+    }
+}
+
+async function createCommands(credentials) {
     const creator = new SlashCreator({
         applicationID: credentials.appId,
         publicKey: credentials.publicKey,
@@ -36,41 +62,4 @@ async function handleCreateAsync(cfnRequestParams) {
 
     // note that syncCommands() is asynchronous
     await once(creator, 'synced');
-
-    return {
-        PhysicalResourceId: "TEST"
-    }
-}
-
-async function getCredentials() {
-    const params = {
-        SecretId: process.env.BOT_TOKEN_SECRET_ARN
-    };
-
-    console.log("Getting Discord credentials...\nSecretId:", params.SecretId);
-    const command = new GetSecretValueCommand(params);
-
-    let parsedData;
-
-    try {
-        const data = await secretsClient.send(command);
-        parsedData = JSON.parse(data.SecretString);
-    } catch (err) {
-        console.log("Error retrieving credentials.");
-        throw err;
-    }
-
-    const appId = parsedData['appId'];
-    const botToken = parsedData['botToken'];
-    const publicKey = parsedData['publicKey'];
-
-    if (!appId || !botToken || !publicKey) {
-        throw new Error("Missing App ID, Bot Token or public key value.")
-    }
-
-    return {
-        appId,
-        botToken,
-        publicKey
-    };
 }
