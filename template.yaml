@@ -44,28 +44,19 @@ Resources:
     Properties:
       CodeUri: ./src/handler
       Description: "Serverless Function to handle incoming Discord requests"
-      Handler: app.lambdaHandler
+      Handler: index.lambdaHandler
       Events:
         HelloWorld:
           Type: Api
           Properties:
             RestApiId: !Ref DiscordInteractionApi
-            Path: /hello
+            Path: /event
             Method: post
       Environment:
         Variables:
           DISCORD_PUBLIC_KEY: '{{resolve:ssm:/serverless-discord-bot/prod/DISCORD_PUBLIC_KEY}}'
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   DiscordInteractionApi:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${DiscordInteractionApi}.execute-api.${AWS::Region}.amazonaws.com/prod/hello/"
-  DiscordHandlerFunction:
-    Description: "Discord Handler Lambda Function ARN"
-    Value: !GetAtt DiscordHandlerFunction.Arn
-  DiscordHandlerFunctionIamRole:
-    Description: "Implicit IAM Role created for Discord Handler function"
-    Value: !GetAtt DiscordHandlerFunctionRole.Arn
+    Value: !Sub "https://${DiscordInteractionApi}.execute-api.${AWS::Region}.amazonaws.com/prod/event/"
