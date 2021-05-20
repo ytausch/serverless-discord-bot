@@ -1,10 +1,10 @@
 const {once} = require('events');
-
 const CfnLambda = require('cfn-lambda');
-const {SlashCreator} = require('slash-create');
-
 const {getCredentials} = require('./secretsHelper');
-const HelloCommand = require("./commands/helloCommand");
+
+// included in commands layer
+const {SlashCreator} = require('slash-create');
+const HelloCommand = require('/opt/nodejs/commands/helloCommand');
 
 exports.lambdaHandler = CfnLambda({
     AsyncCreate: handleCreateAsync,
@@ -34,11 +34,16 @@ async function handleDeleteAsync() {
 }
 
 async function handleCreateOrUpdate() {
-    const credentials = await getCredentials(process.env.BOT_TOKEN_SECRET_ARN);
-    await createCommands(credentials);
+    try {
+        const credentials = await getCredentials(process.env.BOT_TOKEN_SECRET_ARN);
+        await createCommands(credentials);
 
-    return {
-        PhysicalResourceId: "SlashCommands:" + credentials.appId
+        return {
+            PhysicalResourceId: "SlashCommands:" + credentials.appId
+        }
+    } catch (err) {
+        console.log(err.stack);
+        throw err;
     }
 }
 

@@ -16,6 +16,11 @@ Globals:
     Timeout: 3
 
 Resources:
+  CommandsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./src/commands_layer
+
   CreateCommandsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -28,6 +33,8 @@ Resources:
       Policies:
         - AWSSecretsManagerGetSecretValuePolicy:
             SecretArn: !Ref BotTokenSecretArn
+      Layers:
+        - !Ref CommandsLayer
 
   CreateCommandsInvoker:
     Type: Custom::CreateCommandsInvoker
