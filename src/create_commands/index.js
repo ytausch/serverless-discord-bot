@@ -4,7 +4,13 @@ const {getCredentials} = require('./secretsHelper');
 
 // included in commands layer
 const {SlashCreator} = require('slash-create');
-const HelloCommand = require('/opt/nodejs/commands/helloCommand');
+
+// match any JS file in commands directory
+const COMMANDS_DIR_OPTIONS = {
+    dirname: '/opt/nodejs/commands',
+    filter: /^([^.].*)\.js$/,
+    recursive: false
+};
 
 exports.lambdaHandler = CfnLambda({
     AsyncCreate: handleCreateAsync,
@@ -62,7 +68,7 @@ async function createCommands(credentials) {
     });
 
     creator
-        .registerCommand(HelloCommand)
+        .registerCommandsIn(COMMANDS_DIR_OPTIONS)
         .syncCommands();
 
     // note that syncCommands() is asynchronous
