@@ -61,7 +61,7 @@ Resources:
             Method: post
       Environment:
         Variables:
-          DISCORD_PUBLIC_KEY: '{{resolve:ssm:/serverless-discord-bot/prod/DISCORD_PUBLIC_KEY}}'
+          DISCORD_PUBLIC_KEY: !Sub '{{resolve:secretsmanager:${BotTokenSecretArn}:SecretString:publicKey}}'
 
 Outputs:
   DiscordInteractionApi:
