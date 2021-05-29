@@ -33,6 +33,9 @@ Resources:
     Type: Custom::CreateCommandsInvoker
     Properties:
       ServiceToken: !GetAtt CreateCommandsFunction.Arn
+      # Passing the CommandsLayer ARN will cause a custom resource update every time the commands are updated.
+      # (note that the ARN of a LayerVersion Resource ends with an incrementing layer version number)
+      CommandsLayerVersion: !Ref CommandsLayer
 
   DiscordInteractionApi:
     Type: AWS::Serverless::HttpApi
