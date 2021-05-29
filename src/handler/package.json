@@ -4,7 +4,7 @@
   "main": "index.js",
   "author": "ytausch",
   "license": "MIT",
-  "dependencies": {
-    "discord-interactions": "^2.0.2"
+  "devDependencies": {
+    "slash-create": "^3.2.1"
   }
 }

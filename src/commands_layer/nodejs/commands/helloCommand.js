@@ -9,4 +9,8 @@ module.exports = class HelloCommand extends SlashCommand {
         });
         this.filePath = __filename;
     }
+
+    async run(ctx) {
+        return `Hello, ${ctx.user.username}`;
+    }
 };
