@@ -1,6 +1,5 @@
 const {once} = require('events');
 const CfnLambda = require('cfn-lambda');
-const {getCredentials} = require('./secretsHelper');
 
 // included in commands layer
 const {SlashCreator} = require('slash-create');
@@ -29,35 +28,32 @@ async function handleUpdateAsync() {
 }
 
 async function handleDeleteAsync() {
-    const credentials = await getCredentials(process.env.BOT_TOKEN_SECRET_ARN);
-
     // do nothing here - commands should persist
     // (note that global commands take up to 1 hour to update)
 
     return {
-        PhysicalResourceId: "SlashCommands:" + credentials.appId
+        PhysicalResourceId: "SlashCommands:" + process.env.DISCORD_APP_ID
     }
 }
 
 async function handleCreateOrUpdate() {
     try {
-        const credentials = await getCredentials(process.env.BOT_TOKEN_SECRET_ARN);
-        await createCommands(credentials);
-
-        return {
-            PhysicalResourceId: "SlashCommands:" + credentials.appId
-        }
+        await createCommands();
     } catch (err) {
         console.log(err.stack);
         throw err;
     }
+
+    return {
+        PhysicalResourceId: "SlashCommands:" + process.env.DISCORD_APP_ID
+    }
 }
 
-async function createCommands(credentials) {
+async function createCommands() {
     const creator = new SlashCreator({
-        applicationID: credentials.appId,
-        publicKey: credentials.publicKey,
-        token: credentials.botToken
+        applicationID: process.env.DISCORD_APP_ID,
+        publicKey: process.env.DISCORD_PUBLIC_KEY,
+        token: process.env.DISCORD_BOT_TOKEN
     });
 
     creator.on('debug', console.log);

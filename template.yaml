@@ -4,12 +4,6 @@ Description: >
   serverless-discord-bot
   A Serverless Discord Bot template built with Discord Slash Commands and AWS SAM.
 
-Parameters:
-  BotTokenSecretArn:
-    Type: String
-    AllowedPattern: '^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:[a-zA-Z0-9\/_+=.@-]+$'
-    ConstraintDescription: "Parameter BotTokenSecretArn must contain a valid Secrets Manager Secret ARN"
-
 Globals:
   Function:
     Runtime: nodejs14.x
@@ -29,10 +23,9 @@ Resources:
       Handler: index.lambdaHandler
       Environment:
         Variables:
-          BOT_TOKEN_SECRET_ARN: !Ref BotTokenSecretArn
-      Policies:
-        - AWSSecretsManagerGetSecretValuePolicy:
-            SecretArn: !Ref BotTokenSecretArn
+          DISCORD_APP_ID: '{{resolve:secretsmanager:/dev/serverless_discord_bot/discord:SecretString:app_id}}'
+          DISCORD_PUBLIC_KEY: '{{resolve:secretsmanager:/dev/serverless_discord_bot/discord:SecretString:public_key}}'
+          DISCORD_BOT_TOKEN: '{{resolve:secretsmanager:/dev/serverless_discord_bot/discord:SecretString:bot_token}}'
       Layers:
         - !Ref CommandsLayer
 
@@ -42,7 +35,7 @@ Resources:
       ServiceToken: !GetAtt CreateCommandsFunction.Arn
 
   DiscordInteractionApi:
-    Type: AWS::Serverless::Api
+    Type: AWS::Serverless::HttpApi
     Properties:
       StageName: prod
 
@@ -54,16 +47,19 @@ Resources:
       Handler: index.lambdaHandler
       Events:
         HelloWorld:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref DiscordInteractionApi
-            Path: /event
+            ApiId: !Ref DiscordInteractionApi
             Method: post
+            Path: /event
       Environment:
         Variables:
-          DISCORD_PUBLIC_KEY: !Sub '{{resolve:secretsmanager:${BotTokenSecretArn}:SecretString:publicKey}}'
+          DISCORD_APP_ID: '{{resolve:secretsmanager:/dev/serverless_discord_bot/discord:SecretString:app_id}}'
+          DISCORD_PUBLIC_KEY: '{{resolve:secretsmanager:/dev/serverless_discord_bot/discord:SecretString:public_key}}'
+      Layers:
+        - !Ref CommandsLayer
 
 Outputs:
   DiscordInteractionApi:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${DiscordInteractionApi}.execute-api.${AWS::Region}.amazonaws.com/prod/event/"
+    Value: !Sub "https://${DiscordInteractionApi}.execute-api.${AWS::Region}.amazonaws.com/prod/event"
