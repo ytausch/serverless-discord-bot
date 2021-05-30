@@ -5,7 +5,7 @@ module.exports = class HelloCommand extends SlashCommand {
         super(creator, {
             name: 'hello',
             description: 'Says hello to you.',
-            guildIDs: ['808403061735292968']
+            guildIDs: ['SET_YOUR_TEST_GUILD_ID_HERE']
         });
         this.filePath = __filename;
     }
