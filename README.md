@@ -41,7 +41,7 @@ sam build
 sam deploy --guided
 ```
 
-7. Copy the **API Gateway endpoint URL** stack output and paste it in the Discord Developer Portal
+7. Copy the **API Gateway endpoint URL** stack output and paste it in the Discord Developer Portal as *Interactions Endpoint URL*.
 8. Have some fun and build something great!
 
 ## Usage
