@@ -1,0 +1,22 @@
+version: 2
+updates:
+  # Commands Layer
+  - package-ecosystem: "npm"
+    directory: "/src/commands_layer/nodejs"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+  
+  # Commands Creator
+  - package-ecosystem: "npm"
+    directory: "/src/create_commands"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+  
+  # Handler
+  - package-ecosystem: "npm"
+    directory: "/src/handler"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
