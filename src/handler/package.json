@@ -5,6 +5,6 @@
   "author": "ytausch",
   "license": "MIT",
   "devDependencies": {
-    "slash-create": "^3.4.2"
+    "slash-create": "^3.5.0"
   }
 }
