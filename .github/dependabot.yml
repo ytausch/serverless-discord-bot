@@ -4,19 +4,16 @@ updates:
   - package-ecosystem: "npm"
     directory: "/src/commands_layer/nodejs"
     schedule:
-      interval: "weekly"
-      day: "saturday"
+      interval: "monthly"
   
   # Commands Creator
   - package-ecosystem: "npm"
     directory: "/src/create_commands"
     schedule:
-      interval: "weekly"
-      day: "saturday"
+      interval: "monthly"
   
   # Handler
   - package-ecosystem: "npm"
     directory: "/src/handler"
     schedule:
-      interval: "weekly"
-      day: "saturday"
+      interval: "monthly"
