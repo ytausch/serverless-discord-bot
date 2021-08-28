@@ -31,10 +31,10 @@ It must contain the following (self-explanatory) key/value pairs you get from th
 3. Install the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html).
    You can optionally also install the [AWS Toolkit](https://aws.amazon.com/tools/) extension for your IDE. 
 4. Clone this repository.
-5. Add your commands in `src/commands_layer/nodejs/commands`.
+5. Add your commands in [`src/commands_layer/nodejs/commands`](./src/commands_layer/nodejs/commands).
    For more information, refer to the docs linked below.
    Note that global commands take up to one hour to update.
-6. Run `npm install` in the commands layer folder ([`/src/commands_layer/nodejs`](./src/commands_layer/nodejs))
+6. Run `npm install` in the commands layer folder ([`src/commands_layer/nodejs`](./src/commands_layer/nodejs))
 7. To build and deploy the application, run the following in your shell (alternatively use AWS Toolkit):
 
 ```text
