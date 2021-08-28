@@ -34,7 +34,8 @@ It must contain the following (self-explanatory) key/value pairs you get from th
 5. Add your commands in `src/commands_layer/nodejs/commands`.
    For more information, refer to the docs linked below.
    Note that global commands take up to one hour to update.
-6. To build and deploy the application, run the following in your shell (alternatively use AWS Toolkit):
+6. Run `npm install` in the commands layer folder ([`/src/commands_layer/nodejs`](./src/commands_layer/nodejs))
+7. To build and deploy the application, run the following in your shell (alternatively use AWS Toolkit):
 
 ```text
 sam build
