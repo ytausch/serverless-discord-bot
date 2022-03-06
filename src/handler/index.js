@@ -1,12 +1,6 @@
-// included in commands layer
 const {AWSLambdaServer, SlashCreator} = require('slash-create');
 
-// match any JS file in commands directory
-const COMMANDS_DIR_OPTIONS = {
-    dirname: '/opt/nodejs/commands',
-    filter: /^([^.].*)\.js$/,
-    recursive: false
-};
+const COMMANDS_DIR = '/opt/nodejs/commands';
 
 const creator = new SlashCreator({
     applicationID: process.env.DISCORD_APP_ID,
@@ -15,7 +9,7 @@ const creator = new SlashCreator({
 
 creator
     .withServer(new AWSLambdaServer(module.exports, 'lambdaHandler'))
-    .registerCommandsIn(COMMANDS_DIR_OPTIONS);
+    .registerCommandsIn(COMMANDS_DIR);
 
 creator.on('debug', console.log);
 creator.on('warn', console.log);

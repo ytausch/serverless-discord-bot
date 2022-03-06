@@ -1,15 +1,8 @@
 const {once} = require('events');
 const CfnLambda = require('cfn-lambda');
-
-// included in commands layer
 const {SlashCreator} = require('slash-create');
 
-// match any JS file in commands directory
-const COMMANDS_DIR_OPTIONS = {
-    dirname: '/opt/nodejs/commands',
-    filter: /^([^.].*)\.js$/,
-    recursive: false
-};
+const COMMANDS_DIR = '/opt/nodejs/commands';
 
 exports.lambdaHandler = CfnLambda({
     AsyncCreate: handleCreateAsync,
@@ -64,7 +57,7 @@ async function createCommands() {
     });
 
     creator
-        .registerCommandsIn(COMMANDS_DIR_OPTIONS)
+        .registerCommandsIn(COMMANDS_DIR)
         .syncCommands();
 
     // note that syncCommands() is asynchronous
